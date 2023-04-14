@@ -1,0 +1,14 @@
+Header header
+
+uint8_t HERTZ_05 = 0        # 0.5 Hz
+uint8_t HERTZ_02 = 1        # 0.2 Hz
+uint8_t HERTZ_01 = 2        # 0.1 Hz
+uint8_t HERTZ_10 = 3        # 1 Hz
+uint8_t HERTZ_20 = 4        # 2 Hz
+uint8_t HERTZ_30 = 5        # 3 Hz
+
+uint8_t hertz
+
+---
+Header header
+uint8_t hertz

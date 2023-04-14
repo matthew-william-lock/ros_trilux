@@ -1,0 +1,5 @@
+Header header
+bool ENABLED_ANALOG = False   # Enable or Disable analog output
+---
+Header header
+bool ENABLED_ANALOG = True   # Show if analog output is enabled
