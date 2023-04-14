@@ -1,11 +1,11 @@
 Header header
 
-bool ENABLE_VIN = false     # Enables or disable Vin Reporting
-bool ENABLE_VREF = false    # Enables or disable Vref Reporting
-bool ENABLE_TEMP = false    # Enables or disable Temperature Reporting
+bool enabled_vin        # enables or disable vin reporting
+bool enable_vref        # enables or disable vref reporting
+bool enable_temp        # enables or disable temperature reporting
 ---
 Header header
 
-bool VIN_ENABLED = false    # Shows if Vin Reporting is enabled
-bool VREF_ENABLED = false   # Shows if Vref Reporting is enabled
-bool TEMP_ENABLED = false   # Shows if Temperature Reporting is enabled
+bool vin_enabled        # shows if vin reporting is enabled
+bool vref_enabled       # shows if vref reporting is enabled
+bool temp_enabled       # shows if temperature reporting is enabled

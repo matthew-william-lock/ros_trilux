@@ -1,5 +1,5 @@
 Header header
-bool ENABLED_ANALOG = false   # Enable or Disable analog output
+bool enabled_analog   # Enable or Disable analog output
 ---
 Header header
-bool ENABLED_ANALOG = true   # Show if analog output is enabled
+bool analog_enabled    # Show if analog output is enabled
