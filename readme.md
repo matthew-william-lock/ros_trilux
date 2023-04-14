@@ -1,3 +1,3 @@
-# ros_fluorometer
+# ros_trilux
 
-ROS driver for [Trilux Fluorometer](https://chelsea.co.uk/products/trilux-algae/).
+ROS driver and messages for [Trilux Fluorometer](https://chelsea.co.uk/products/trilux-algae/).

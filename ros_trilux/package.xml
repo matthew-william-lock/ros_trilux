@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ros_fluorometer</name>
+  <name>ros_trilux</name>
   <version>0.0.0</version>
-  <description>The ros_fluorometer package</description>
+  <description>The ros_trilux package</description>
 
   <maintainer email="mwlock@kth.se">matt</maintainer>
   <license>BSD</license>
