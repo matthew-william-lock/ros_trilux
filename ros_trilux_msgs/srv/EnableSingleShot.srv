@@ -1,5 +1,5 @@
 Header header
-bool enable = False
+bool enable = false
 ---
 Header header
 bool status
