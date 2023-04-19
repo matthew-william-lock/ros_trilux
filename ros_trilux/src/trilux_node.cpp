@@ -29,10 +29,13 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef TRILUX_NODE_H
-#define TRILUX_NODE_H
-
+#include <trilux/trilux_node.h>
 #include <ros/ros.h>
 
+int main(int argc, char **argv)
+{
+    ros::init(argc, argv, "trilux_node");
 
-#endif // TRILUX_NODE_H
+    // ros::spin();
+    return 0;
+}

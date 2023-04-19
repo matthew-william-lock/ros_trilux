@@ -8,12 +8,16 @@ project(ros_trilux)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  roscpp
   rospy
   std_msgs
   ros_trilux_msgs
 )
 
-catkin_package()
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES ros_trilux
+)
 
 ###########
 ## Build ##
@@ -24,24 +28,26 @@ file(GLOB_RECURSE HDRS include/*.h)
 file(GLOB_RECURSE SRCS src/*.cpp)
 
 # Print all sources
-message(STATUS "HDRS: ${HDRS}")
-message(STATUS "SRCS: ${SRCS}")
+# message(STATUS "HDRS: ${HDRS}")
+# message(STATUS "SRCS: ${SRCS}")
 
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
-########################
-###### MAKE NODES  #####
-########################
+## Declare a C++ library
+add_library(ros_trilux
+  src/trilux_node.cpp
+)
 
-# Loop through all the source files
-foreach(SRC ${SRCS})
-    # Extract the filename without an extension (NAME_WE)
-    get_filename_component(TARGET ${SRC} NAME_WE)
-    # Add compile target
-    add_executable(${TARGET} ${SRC} ${HDRS})
-    # Link to Boost libraries AND your targets and dependencies
-    target_link_libraries(${TARGET} ${catkin_LIBRARIES})
-    add_dependencies(${TARGET} ${catkin_EXPORTED_TARGETS})
-endforeach(SRC)
+target_link_libraries(ros_trilux
+  ${catkin_LIBRARIES}
+)
+
+## Declare a cpp executable
+add_executable(trilux_node src/trilux_node.cpp include/trilux/trilux_node.h)
+
+target_link_libraries(trilux_node
+  ${catkin_LIBRARIES}
+)
