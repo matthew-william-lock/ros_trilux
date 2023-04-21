@@ -33,9 +33,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define TRILUX_NODE_H
 
 #include <trilux/trilux_serial.h>
+#include <trilux/trilux_serial.h>
 
 #include <ros/ros.h>
-
 #include <ros_trilux_msgs/Measurement.h>
 #include <ros_trilux_msgs/EnableAnalog.h>
 
@@ -59,11 +59,18 @@ namespace trilux
        * @brief Constructor
        * This constructor initialises the node and sets up the serial port.
        */
-      TriLuxNode():
-         trilux_serial("/dev/ttyUSB0", 115200)
-         {
-            init();
-         };
+      TriLuxNode() : trilux_serial(
+                         "/dev/ttyUSB0",
+                         9600,
+                         // Lambda function to handle data received from the TriLux
+                         [this](const trilux::TriLuxMeasurement &measurement)
+                         {
+                            this->onDataCallback(measurement);
+                         })
+      {
+         ROS_INFO("TriLux node started");
+         init();
+      };
 
       ~TriLuxNode(){};
 
@@ -103,11 +110,16 @@ namespace trilux
          this->measurement_publisher = nh.advertise<ros_trilux_msgs::Measurement>("measurement", 1);
       }
 
-      //enableAnalogOutput
+      // enableAnalogOutput
       bool enableAnalogOutput(ros_trilux_msgs::EnableAnalog::Request &req, ros_trilux_msgs::EnableAnalog::Response &res)
       {
          ROS_INFO("enableAnalogOutput");
          return true;
+      }
+
+      const void onDataCallback(const trilux::TriLuxMeasurement &measurement)
+      {
+         ROS_INFO("onDataCallback");
       }
    };
 }

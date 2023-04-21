@@ -34,11 +34,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "trilux_node");
+   // Init ROS
+   ros::init(argc, argv, "trilux_node");
+   ROS_INFO("Starting trilux_node");
 
-    // Start trilux handler
-    trilux::TriLuxNode trilux_node;
+   // Start trilux handler
+   trilux::TriLuxNode trilux_node;
 
-    ros::spin();
-    return 0;
+   ros::spin();
+   return 0;
 }

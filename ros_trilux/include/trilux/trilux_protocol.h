@@ -38,6 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace trilux
 {
+
    class TriLuxProtocol
    {
    public:
@@ -49,7 +50,7 @@ namespace trilux
        * @param enable True to enable continuous measurement mode, false to disable
        * @return The command string to send to the TriLux
        */
-      inline std::string setContinuousMeasurement(bool enable)
+      inline std::string setContinuousMeasurementMsg(bool enable)
       {
          return enable ? "Ru" : "St";
       };
@@ -57,12 +58,11 @@ namespace trilux
       /*!
        * @brief Reboot the TriLux
        * @return The command string to send to the TriLux
-       * @note This command will cause the TriLux to disconnect from the serial port
-       *      and reconnect after a short delay
+       * @note This command will cause the TriLux to disconnect from the serial port and reconnect after a short delay
        * @note This command will not return a response
        *
        */
-      inline std::string reboot()
+      inline std::string rebootMsg()
       {
          return "Reboot";
       }
@@ -72,7 +72,7 @@ namespace trilux
        * @param enable True to enable VIN reporting, false to disable
        * @return The command string to send to the TriLux
        */
-      inline std::string enableVinReporting(bool enable)
+      inline std::string enableVinReportingMsg(bool enable)
       {
          return enable ? "Sh vi on" : "Sh vi of";
       }
@@ -82,7 +82,7 @@ namespace trilux
        * @param enable True to enable Vref reporting, false to disable
        * @return The command string to send to the TriLux
        */
-      inline std::string enableVrefReporting(bool enable)
+      inline std::string enableVrefReportingMsg(bool enable)
       {
          return enable ? "Sh vr on" : "Sh vr of";
       }
@@ -92,7 +92,7 @@ namespace trilux
        * @param enable True to enable temp reporting, false to disable
        * @return The command string to send to the TriLux
        */
-      inline std::string enableTempReporting(bool enable)
+      inline std::string enableTempReportingMsg(bool enable)
       {
          return enable ? "Sh te on" : "Sh te of";
       }
@@ -102,7 +102,7 @@ namespace trilux
        * @param enable True to enable analog reporting, false to disable
        * @return The command string to send to the TriLux
        */
-      inline std::string enableAnalog(bool enable)
+      inline std::string enableAnalogMsg(bool enable)
       {
          return enable ? "An on" : "An of";
       }
