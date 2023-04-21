@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.0.2)
 project(ros_trilux_msgs)
 
 find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
   std_msgs
   message_generation
 )

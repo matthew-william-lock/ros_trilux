@@ -14,6 +14,8 @@ find_package(catkin REQUIRED COMPONENTS
   ros_trilux_msgs
 )
 
+find_package(Boost REQUIRED COMPONENTS system thread serialization)
+
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ros_trilux
@@ -34,20 +36,28 @@ file(GLOB_RECURSE SRCS src/*.cpp)
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 add_library(ros_trilux
   src/trilux_node.cpp
+  include/trilux/trilux_serial.h
 )
 
 target_link_libraries(ros_trilux
   ${catkin_LIBRARIES}
+  ${Boost_SYSTEM_LIBRARY}
+  ${Boost_THREAD_LIBRARY}
+  ${Boost_SERIALIZATION_LIBRARY}
 )
 
 ## Declare a cpp executable
-add_executable(trilux_node src/trilux_node.cpp include/trilux/trilux_node.h)
+add_executable(trilux_node src/trilux_node.cpp include/trilux/trilux_node.h include/trilux/trilux_serial.h)
 
 target_link_libraries(trilux_node
   ${catkin_LIBRARIES}
+  ${Boost_SYSTEM_LIBRARY}
+  ${Boost_THREAD_LIBRARY}
+  ${Boost_SERIALIZATION_LIBRARY}
 )

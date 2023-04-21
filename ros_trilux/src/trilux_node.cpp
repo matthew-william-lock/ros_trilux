@@ -36,6 +36,9 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "trilux_node");
 
-    // ros::spin();
+    // Start trilux handler
+    trilux::TriLuxNode trilux_node;
+
+    ros::spin();
     return 0;
 }

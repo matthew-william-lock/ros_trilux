@@ -32,7 +32,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef TRILUX_NODE_H
 #define TRILUX_NODE_H
 
+#include <trilux/trilux_serial.h>
+
 #include <ros/ros.h>
+
+#include <ros_trilux_msgs/Measurement.h>
+#include <ros_trilux_msgs/EnableAnalog.h>
 
 namespace trilux
 {
@@ -41,14 +46,41 @@ namespace trilux
 
       * This class is the main class for the TriLux node. It is responsible for
       * initialising the node, setting up the serial port and the ROS interface.
+      *
+      * When the trilux flourometer is connected and powered on, the default setting (unless changed)
+      * is to continuously provide measurements at a rate of 1Hz.
+      *
+      * @author Matthew Lock
       */
    class TriLuxNode
    {
    public:
-      TriLuxNode(){};
+      /*!
+       * @brief Constructor
+       * This constructor initialises the node and sets up the serial port.
+       */
+      TriLuxNode():
+         trilux_serial("/dev/ttyUSB0", 115200)
+         {
+            init();
+         };
+
       ~TriLuxNode(){};
 
    private:
+      trilux::TriLuxSerial trilux_serial;
+
+      ros::ServiceServer enable_analog_output_service;
+      ros::ServiceServer enable_reporting_service;
+      ros::ServiceServer enable_single_shot_service;
+      ros::ServiceServer trigger_measurement_service;
+      ros::ServiceServer reboot_service;
+      ros::ServiceServer save_setup_service;
+      ros::ServiceServer set_rate_service;
+      ros::ServiceServer start_continuous_measurement_service;
+
+      ros::Publisher measurement_publisher;
+
       /*!
        * @brief Initialise the node
        */
@@ -56,6 +88,26 @@ namespace trilux
       {
          // Initialise the node
          ros::NodeHandle nh, ph("~");
+
+         // ROS subscriber and service servers
+         this->enable_analog_output_service = nh.advertiseService("enable_analog_output", &TriLuxNode::enableAnalogOutput, this);
+         // this->enable_reporting_service = nh.advertiseService("enable_reporting", &TriLuxNode::enableReporting, this);
+         // this->enable_single_shot_service = nh.advertiseService("enable_single_shot", &TriLuxNode::enableSingleShot, this);
+         // this->trigger_measurement_service = nh.advertiseService("trigger_measurement", &TriLuxNode::triggerMeasurement, this);
+         // this->reboot_service = nh.advertiseService("reboot", &TriLuxNode::reboot, this);
+         // this->save_setup_service = nh.advertiseService("save_setup", &TriLuxNode::saveSetup, this);
+         // this->set_rate_service = nh.advertiseService("set_rate", &TriLuxNode::setRate, this);
+         // this->start_continuous_measurement_service = nh.advertiseService("start_continuous_measurement", &TriLuxNode::startContinuousMeasurement, this);
+
+         // ROS publisher
+         this->measurement_publisher = nh.advertise<ros_trilux_msgs::Measurement>("measurement", 1);
+      }
+
+      //enableAnalogOutput
+      bool enableAnalogOutput(ros_trilux_msgs::EnableAnalog::Request &req, ros_trilux_msgs::EnableAnalog::Response &res)
+      {
+         ROS_INFO("enableAnalogOutput");
+         return true;
       }
    };
 }

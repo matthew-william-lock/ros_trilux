@@ -32,13 +32,90 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef TRILUX_SERIAL_H
 #define TRILUX_SERIAL_H
 
+#include <boost/asio.hpp>
+#include <boost/thread.hpp>
+#include <boost/function.hpp>
+#include <boost/lexical_cast.hpp>
+
+#include <iostream>
+
 namespace trilux
-{   
+{
     class TriLuxSerial
     {
     public:
-        TriLuxSerial(){};
+        TriLuxSerial(std::string port_name, int baud) : io(),
+                                                        port(io)
+        {
+            this->connect(port_name, baud);
+        };
+
         ~TriLuxSerial(){};
+
+        /**
+         * Setup and connect to serial port.
+         * @param portName Serial port name.
+         * @param baud Serial baud rate.
+         * @return
+         */
+        bool connect(const std::string &port_name, int baud)
+        {
+            port.open(port_name);
+            port.set_option(boost::asio::serial_port::baud_rate(baud));
+            port.set_option(boost::asio::serial_port::flow_control(boost::asio::serial_port::flow_control::none));
+            port.set_option(boost::asio::serial_port::parity(boost::asio::serial_port::parity::none));
+            port.set_option(boost::asio::serial_port::stop_bits(boost::asio::serial_port::stop_bits::one));
+
+            if (!port.is_open())
+            {
+                return false;
+            }
+
+            this->startReceive();
+            this->runner = boost::thread(boost::bind(&boost::asio::io_service::run, &io));
+
+            return true;
+        }
+
+        /*!
+         * @brief Start receiving data from the serial port
+         */
+        void startReceive()
+        {
+            boost::asio::async_read_until(this->port, this->buffer, "\r", boost::bind(&TriLuxSerial::onData, this, _1, _2));
+        };
+
+        /*!
+         * @brief Callback for when data is received from the serial port
+         * @param e Error code
+         * @param size Size of data received
+         * @note This function is called by the boost::asio::async_read_until function
+         */
+        void onData(const boost::system::error_code &e, std::size_t size)
+        {
+
+            if (e)
+            {
+                std::cout << "Error: " << e.message() << std::endl;
+                return;
+            }
+
+            std::istream is(&buffer);
+            std::string line;
+            std::getline(is, line);
+
+            std::cout << "Received: " << line << std::endl;
+
+            // Start receiving again
+            this->startReceive();
+        }
+
+    private:
+        boost::asio::io_service io; // Hardware i/o service.
+        // boost::asio::deadline_timer timer; // Timer without an expiry time.
+        boost::asio::serial_port port; // Serial input port
+        boost::thread runner;          // Main operation thread
+        boost::asio::streambuf buffer; // Input buffer.
     };
 }
 

@@ -34,6 +34,79 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef TRILUX_PROTOCOL_H
 #define TRILUX_PROTOCOL_H
 
+#include <string>
 
+namespace trilux
+{
+   class TriLuxProtocol
+   {
+   public:
+      TriLuxProtocol(){};
+      ~TriLuxProtocol(){};
+
+      /*!
+       * @brief Enable or disable continuous measurement mode
+       * @param enable True to enable continuous measurement mode, false to disable
+       * @return The command string to send to the TriLux
+       */
+      inline std::string setContinuousMeasurement(bool enable)
+      {
+         return enable ? "Ru" : "St";
+      };
+
+      /*!
+       * @brief Reboot the TriLux
+       * @return The command string to send to the TriLux
+       * @note This command will cause the TriLux to disconnect from the serial port
+       *      and reconnect after a short delay
+       * @note This command will not return a response
+       *
+       */
+      inline std::string reboot()
+      {
+         return "Reboot";
+      }
+
+      /*!
+       * @brief Enable or disable VIN reporting
+       * @param enable True to enable VIN reporting, false to disable
+       * @return The command string to send to the TriLux
+       */
+      inline std::string enableVinReporting(bool enable)
+      {
+         return enable ? "Sh vi on" : "Sh vi of";
+      }
+
+      /*!
+       * @brief Enable or disable Vref reporting
+       * @param enable True to enable Vref reporting, false to disable
+       * @return The command string to send to the TriLux
+       */
+      inline std::string enableVrefReporting(bool enable)
+      {
+         return enable ? "Sh vr on" : "Sh vr of";
+      }
+
+      /*!
+       * @brief Enable or disable temp reporting
+       * @param enable True to enable temp reporting, false to disable
+       * @return The command string to send to the TriLux
+       */
+      inline std::string enableTempReporting(bool enable)
+      {
+         return enable ? "Sh te on" : "Sh te of";
+      }
+
+      /*!
+       * @brief Enable or disable analog reporting
+       * @param enable True to enable analog reporting, false to disable
+       * @return The command string to send to the TriLux
+       */
+      inline std::string enableAnalog(bool enable)
+      {
+         return enable ? "An on" : "An of";
+      }
+   };
+}
 
 #endif // TRILUX_PROTOCOL_H
