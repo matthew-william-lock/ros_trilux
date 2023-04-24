@@ -14,6 +14,8 @@ ROS driver and messages for [TriLux Fluorometer](https://chelsea.co.uk/products/
 roslaunch ros_trilux trilux_measure.launch
 ```
 
+Launching this node will automatically start the `ros_trilux` node, and will publish measurements continuously or in single-shot mode (if this has been enabled).
+
 Launch parameters:
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -24,3 +26,8 @@ Launch parameters:
 | Topic | Type | Description |
 | --- | --- | --- |
 | `core/trilux/measurement` | `ros_trilux_msgs::Measurement` | Measurements from the TriLux |
+
+## Examples
+
+Some examples of how to interact with the driver are provided in the `src/examples` directory and include:
+- `single_shot.cpp`: Single-shot measurement example

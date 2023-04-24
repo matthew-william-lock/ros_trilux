@@ -53,7 +53,7 @@ namespace trilux
         double chlorophyll_a;           // [ug/L]
         double nephelometric_turbidity; // [FNU]
         double phycocyanin;             // [ug/L]
-        uint32_t measurement_time;        // [s]
+        uint32_t measurement_time;      // [s]
         double vin;                     // [V]
         double vref;                    // [V]
         double temp;                    // [C]
@@ -161,9 +161,18 @@ namespace trilux
          */
         void send(std::string data)
         {
-            // Add CR to end of string
-            data += "\r";
-            boost::asio::write(this->port, boost::asio::buffer(data, data.size()));
+            try
+            {
+                serial_write_mutex.lock();
+                // Add CR to end of string
+                data += "\r";
+                boost::asio::write(this->port, boost::asio::buffer(data, data.size()));
+            }
+            catch (boost::system::system_error &e)
+            {
+                std::cout << "Error: " << e.what() << std::endl;
+                serial_write_mutex.unlock();
+            }
         }
 
         /**
@@ -237,6 +246,8 @@ namespace trilux
         boost::asio::serial_port port;     // Serial input port
         boost::thread runner;              // Main operation thread
         boost::asio::streambuf buffer;     // Input buffer.
+
+        boost::mutex serial_write_mutex;
 
         std::function<void(const trilux::TriLuxMeasurement &)> callback_;
     };

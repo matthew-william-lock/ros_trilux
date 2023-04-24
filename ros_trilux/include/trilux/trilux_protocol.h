@@ -106,6 +106,17 @@ namespace trilux
       {
          return enable ? "An on" : "An of";
       }
+
+      /*!
+       * @brief Enable or disable single shot mode
+       * @param enable True to enable single shot mode, false to disable
+       * @return The command string to send to the TriLux
+       */
+      inline std::string enableSingleShotMsg(bool enable)
+      {
+         return enable ? "Si sh on" : "Si sh of";
+      }
+
    };
 }
 

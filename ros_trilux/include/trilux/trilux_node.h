@@ -36,8 +36,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <trilux/trilux_serial.h>
 
 #include <ros/ros.h>
+
 #include <ros_trilux_msgs/Measurement.h>
 #include <ros_trilux_msgs/EnableAnalog.h>
+#include <ros_trilux_msgs/EnableSingleShot.h>
+#include <ros_trilux_msgs/GetMeasurement.h>
 
 namespace trilux
 {
@@ -99,8 +102,8 @@ namespace trilux
          // ROS subscriber and service servers
          this->enable_analog_output_service = nh.advertiseService("enable_analog_output", &TriLuxNode::enableAnalogOutput, this);
          // this->enable_reporting_service = nh.advertiseService("enable_reporting", &TriLuxNode::enableReporting, this);
-         // this->enable_single_shot_service = nh.advertiseService("enable_single_shot", &TriLuxNode::enableSingleShot, this);
-         // this->trigger_measurement_service = nh.advertiseService("trigger_measurement", &TriLuxNode::triggerMeasurement, this);
+         this->enable_single_shot_service = nh.advertiseService("enable_single_shot", &TriLuxNode::enableSingleShot, this);
+         this->trigger_measurement_service = nh.advertiseService("trigger_measurement", &TriLuxNode::triggerMeasurement, this);
          // this->reboot_service = nh.advertiseService("reboot", &TriLuxNode::reboot, this);
          // this->save_setup_service = nh.advertiseService("save_setup", &TriLuxNode::saveSetup, this);
          // this->set_rate_service = nh.advertiseService("set_rate", &TriLuxNode::setRate, this);
@@ -110,10 +113,31 @@ namespace trilux
          this->measurement_publisher = nh.advertise<ros_trilux_msgs::Measurement>("core/trilux/measurement", 1);
       }
 
-      // enableAnalogOutput
+      /*!
+      *@brief Enable analog output
+      */
       bool enableAnalogOutput(ros_trilux_msgs::EnableAnalog::Request &req, ros_trilux_msgs::EnableAnalog::Response &res)
       {
          ROS_INFO("enableAnalogOutput");
+         return true;
+      }
+
+       /*!
+      *@brief Enable single shot measurement mode
+      */
+      bool enableSingleShot(ros_trilux_msgs::EnableSingleShot::Request &req, ros_trilux_msgs::EnableSingleShot::Response &res)
+      {
+         ROS_INFO("enableSingleShot");
+         return true;
+      }
+
+      /*!
+      *@brief Trigger a single measurement
+      */
+      bool triggerMeasurement(ros_trilux_msgs::GetMeasurement::Request &req, ros_trilux_msgs::GetMeasurement::Response &res)
+      {
+         // TODO : Finish function
+         ROS_INFO("triggerMeasurement");
          return true;
       }
 
