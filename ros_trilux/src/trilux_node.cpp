@@ -38,8 +38,18 @@ int main(int argc, char **argv)
    ros::init(argc, argv, "trilux_node");
    ROS_INFO("Starting trilux_node");
 
+   // Get serial port and baud rate from parameter server
+   std::string serial_port;
+   int baud_rate;
+   ros::NodeHandle nh("~");
+   nh.param<std::string>("port", serial_port, "/dev/ttyUSB0");
+   nh.param<int>("baud", baud_rate, 9600);
+
+   ROS_INFO("[ROS_TRILUX] Using serial port: %s", serial_port.c_str());
+   ROS_INFO("[ROS_TRILUX] Using baud rate: %d", baud_rate);
+
    // Start trilux handler
-   trilux::TriLuxNode trilux_node;
+   trilux::TriLuxNode trilux_node(serial_port, baud_rate);
 
    ros::spin();
    return 0;

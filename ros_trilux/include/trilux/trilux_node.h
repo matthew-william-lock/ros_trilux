@@ -59,14 +59,14 @@ namespace trilux
        * @brief Constructor
        * This constructor initialises the node and sets up the serial port.
        */
-      TriLuxNode() : trilux_serial(
-                         "/dev/ttyUSB0",
-                         9600,
-                         // Lambda function to handle data received from the TriLux
-                         [this](const trilux::TriLuxMeasurement &measurement)
-                         {
-                            this->onDataCallback(measurement);
-                         })
+      TriLuxNode(std::string port, int baud) : trilux_serial(
+                                                   port,
+                                                   baud,
+                                                   // Lambda function to handle data received from the TriLux
+                                                   [this](const trilux::TriLuxMeasurement &measurement)
+                                                   {
+                                                      this->onDataCallback(measurement);
+                                                   })
       {
          ROS_INFO("TriLux node started");
          init();
@@ -107,7 +107,7 @@ namespace trilux
          // this->start_continuous_measurement_service = nh.advertiseService("start_continuous_measurement", &TriLuxNode::startContinuousMeasurement, this);
 
          // ROS publisher
-         this->measurement_publisher = nh.advertise<ros_trilux_msgs::Measurement>("measurement", 1);
+         this->measurement_publisher = nh.advertise<ros_trilux_msgs::Measurement>("core/trilux/measurement", 1);
       }
 
       // enableAnalogOutput

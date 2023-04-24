@@ -7,3 +7,20 @@ ROS driver and messages for [TriLux Fluorometer](https://chelsea.co.uk/products/
 <p align="center">
   <img src="https://user-images.githubusercontent.com/53016036/233779781-3ab6d705-e14c-4507-8651-119d6b3c5260.png" width="100%">
 </p>
+
+## Launching
+
+```bash
+roslaunch ros_trilux trilux_measure.launch
+```
+
+Launch parameters:
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `driver_port` | `string` | `/dev/ttyUSB0` | Serial port to connect to |
+| `driver_baud` | `int` | `9600` | Serial port baudrate |
+
+## Topics
+| Topic | Type | Description |
+| --- | --- | --- |
+| `core/trilux/measurement` | `ros_trilux_msgs::Measurement` | Measurements from the TriLux |
