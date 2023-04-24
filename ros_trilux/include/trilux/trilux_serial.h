@@ -53,7 +53,7 @@ namespace trilux
         double chlorophyll_a;           // [ug/L]
         double nephelometric_turbidity; // [FNU]
         double phycocyanin;             // [ug/L]
-        double measurement_time;        // [s]
+        uint32_t measurement_time;        // [s]
         double vin;                     // [V]
         double vref;                    // [V]
         double temp;                    // [C]

@@ -120,6 +120,15 @@ namespace trilux
       const void onDataCallback(const trilux::TriLuxMeasurement &measurement)
       {
          ROS_INFO("onDataCallback");
+
+         // Create ros_trilux_msgs/Measurement
+         ros_trilux_msgs::Measurement msg;
+         msg.header.stamp = ros::Time(measurement.measurement_time);
+         msg.chlorophyll_a = measurement.chlorophyll_a;
+         msg.nephelometric_turbidity = measurement.nephelometric_turbidity;
+         msg.phycocyanin = measurement.phycocyanin;
+
+         measurement_publisher.publish(msg);
       }
    };
 }
