@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <ros_trilux_msgs/EnableAnalog.h>
 #include <ros_trilux_msgs/EnableSingleShot.h>
 #include <ros_trilux_msgs/GetMeasurement.h>
-#include <ros_trilux_msgs/StopStartMeasurementsSrv.h>
+#include <ros_trilux_msgs/StopStartMeasurements.h>
 
 namespace trilux
 {
@@ -100,14 +100,14 @@ namespace trilux
          ros::NodeHandle nh, ph("~");
 
          // ROS subscriber and service servers
-         this->enable_analog_output_service = nh.advertiseService("enable_analog_output", &TriLuxNode::enableAnalogOutput, this);
+         this->enable_analog_output_service = nh.advertiseService("trilux/enable_analog_output", &TriLuxNode::enableAnalogOutput, this);
          // this->enable_reporting_service = nh.advertiseService("enable_reporting", &TriLuxNode::enableReporting, this);
-         this->enable_single_shot_service = nh.advertiseService("enable_single_shot", &TriLuxNode::enableSingleShot, this);
-         this->trigger_measurement_service = nh.advertiseService("trigger_measurement", &TriLuxNode::triggerMeasurement, this);
+         this->enable_single_shot_service = nh.advertiseService("trilux/enable_single_shot", &TriLuxNode::enableSingleShot, this);
+         this->trigger_measurement_service = nh.advertiseService("trilux/trigger_measurement", &TriLuxNode::triggerMeasurement, this);
          // this->reboot_service = nh.advertiseService("reboot", &TriLuxNode::reboot, this);
          // this->save_setup_service = nh.advertiseService("save_setup", &TriLuxNode::saveSetup, this);
          // this->set_rate_service = nh.advertiseService("set_rate", &TriLuxNode::setRate, this);
-         this->enable_continuous_measurement_service = nh.advertiseService("enable_continuous_measurement", &TriLuxNode::enableContinuousMeasurement, this);
+         this->enable_continuous_measurement_service = nh.advertiseService("trilux/enable_continuous_measurement", &TriLuxNode::enableContinuousMeasurement, this);
 
          // ROS publisher
          this->measurement_publisher = nh.advertise<ros_trilux_msgs::Measurement>("core/trilux/measurement", 1);
@@ -147,7 +147,7 @@ namespace trilux
       /*!
        *@brief Trigger a single measurement
        */
-      bool enableContinuousMeasurement(ros_trilux_msgs::StopStartMeasurementsSrv::Request &req, ros_trilux_msgs::StopStartMeasurementsSrv::Response &res)
+      bool enableContinuousMeasurement(ros_trilux_msgs::StopStartMeasurements::Request &req, ros_trilux_msgs::StopStartMeasurements::Response &res)
       {
 
          bool enable = req.command == req.START ? true : false;

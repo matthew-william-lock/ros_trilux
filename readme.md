@@ -27,6 +27,11 @@ Launch parameters:
 | --- | --- | --- |
 | `core/trilux/measurement` | `ros_trilux_msgs::Measurement` | Measurements from the TriLux |
 
+## Services
+| Service | Type | Description |
+| --- | --- | --- |
+| `trilux/enable_continuous_measurement` | `ros_trilux_msgs::StopStartMeasurements` | Enable or disable continuous measurement |
+
 ## Examples
 
 Some examples of how to interact with the driver are provided in the `src/examples` directory and include:
