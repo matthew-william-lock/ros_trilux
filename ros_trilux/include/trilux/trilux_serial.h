@@ -64,7 +64,15 @@ namespace trilux
         }
     };
 
-    class TriLuxSerial
+    // Serial Message Struct
+    enum SerialMessageType
+    {
+        MEASUREMENT,
+        STOPPED,
+        RUNNING
+    };
+
+    class TriLuxSerial : public virtual TriLuxProtocol
     {
     public:
         TriLuxSerial(std::string port_name, int baud, std::function<void(const trilux::TriLuxMeasurement &)> onDatacallback) : io(),
@@ -143,6 +151,13 @@ namespace trilux
             std::string line;
             std::getline(is, line);
 
+            SerialMessageType type;
+            if (line.find(this->STOPPED_MESSAGE) != std::string::npos)
+            {
+                type = SerialMessageType::STOPPED;
+                serial_write_mutex.unlock();
+            }
+
             auto measurement = this->decodeData(line);
             if (measurement.first)
             {
@@ -158,8 +173,9 @@ namespace trilux
         /**
          * Send data to serial port.
          * @param data Data to send.
+         * @return Send success.
          */
-        void send(std::string data)
+        bool send(std::string data)
         {
             try
             {
@@ -167,12 +183,15 @@ namespace trilux
                 // Add CR to end of string
                 data += "\r";
                 boost::asio::write(this->port, boost::asio::buffer(data, data.size()));
+                return true;
             }
             catch (boost::system::system_error &e)
             {
                 std::cout << "Error: " << e.what() << std::endl;
                 serial_write_mutex.unlock();
             }
+
+            return false;
         }
 
         /**

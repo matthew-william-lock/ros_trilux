@@ -32,15 +32,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef TRILUX_NODE_H
 #define TRILUX_NODE_H
 
-#include <trilux/trilux_serial.h>
-#include <trilux/trilux_serial.h>
-
 #include <ros/ros.h>
+
+#include <trilux/trilux_serial.h>
 
 #include <ros_trilux_msgs/Measurement.h>
 #include <ros_trilux_msgs/EnableAnalog.h>
 #include <ros_trilux_msgs/EnableSingleShot.h>
 #include <ros_trilux_msgs/GetMeasurement.h>
+#include <ros_trilux_msgs/StopStartMeasurementsSrv.h>
 
 namespace trilux
 {
@@ -83,11 +83,11 @@ namespace trilux
       ros::ServiceServer enable_analog_output_service;
       ros::ServiceServer enable_reporting_service;
       ros::ServiceServer enable_single_shot_service;
+      ros::ServiceServer enable_continuous_measurement_service;
       ros::ServiceServer trigger_measurement_service;
       ros::ServiceServer reboot_service;
       ros::ServiceServer save_setup_service;
       ros::ServiceServer set_rate_service;
-      ros::ServiceServer start_continuous_measurement_service;
 
       ros::Publisher measurement_publisher;
 
@@ -107,37 +107,51 @@ namespace trilux
          // this->reboot_service = nh.advertiseService("reboot", &TriLuxNode::reboot, this);
          // this->save_setup_service = nh.advertiseService("save_setup", &TriLuxNode::saveSetup, this);
          // this->set_rate_service = nh.advertiseService("set_rate", &TriLuxNode::setRate, this);
-         // this->start_continuous_measurement_service = nh.advertiseService("start_continuous_measurement", &TriLuxNode::startContinuousMeasurement, this);
+         this->enable_continuous_measurement_service = nh.advertiseService("enable_continuous_measurement", &TriLuxNode::enableContinuousMeasurement, this);
 
          // ROS publisher
          this->measurement_publisher = nh.advertise<ros_trilux_msgs::Measurement>("core/trilux/measurement", 1);
       }
 
       /*!
-      *@brief Enable analog output
-      */
+       *@brief Enable analog output
+       */
       bool enableAnalogOutput(ros_trilux_msgs::EnableAnalog::Request &req, ros_trilux_msgs::EnableAnalog::Response &res)
       {
          ROS_INFO("enableAnalogOutput");
          return true;
       }
 
-       /*!
-      *@brief Enable single shot measurement mode
-      */
+      /*!
+       *@brief Enable single shot measurement mode
+       */
       bool enableSingleShot(ros_trilux_msgs::EnableSingleShot::Request &req, ros_trilux_msgs::EnableSingleShot::Response &res)
       {
+
+         this->trilux_serial.send(this->trilux_serial.enableSingleShotMsg(req.enable));
+
          ROS_INFO("enableSingleShot");
          return true;
       }
 
       /*!
-      *@brief Trigger a single measurement
-      */
+       *@brief Trigger a single measurement
+       */
       bool triggerMeasurement(ros_trilux_msgs::GetMeasurement::Request &req, ros_trilux_msgs::GetMeasurement::Response &res)
       {
          // TODO : Finish function
          ROS_INFO("triggerMeasurement");
+         return true;
+      }
+
+      /*!
+       *@brief Trigger a single measurement
+       */
+      bool enableContinuousMeasurement(ros_trilux_msgs::StopStartMeasurementsSrv::Request &req, ros_trilux_msgs::StopStartMeasurementsSrv::Response &res)
+      {
+
+         bool enable = req.command == req.START ? true : false;
+         this->trilux_serial.send(this->trilux_serial.setContinuousMeasurementMsg(enable));
          return true;
       }
 

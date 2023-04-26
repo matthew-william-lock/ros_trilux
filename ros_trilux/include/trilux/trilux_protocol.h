@@ -45,6 +45,8 @@ namespace trilux
       TriLuxProtocol(){};
       ~TriLuxProtocol(){};
 
+      static const std::string STOPPED_MESSAGE;
+
       /*!
        * @brief Enable or disable continuous measurement mode
        * @param enable True to enable continuous measurement mode, false to disable
@@ -52,7 +54,7 @@ namespace trilux
        */
       inline std::string setContinuousMeasurementMsg(bool enable)
       {
-         return enable ? "Ru" : "St";
+         return enable ? "run" : "stop";
       };
 
       /*!
@@ -116,8 +118,9 @@ namespace trilux
       {
          return enable ? "Si sh on" : "Si sh of";
       }
-
    };
+
+   const std::string TriLuxProtocol::STOPPED_MESSAGE = "MiniTracka Stopped.";
 }
 
 #endif // TRILUX_PROTOCOL_H
