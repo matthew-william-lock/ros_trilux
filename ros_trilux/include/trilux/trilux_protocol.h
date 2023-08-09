@@ -46,6 +46,8 @@ namespace trilux
       ~TriLuxProtocol(){};
 
       static const std::string STOPPED_MESSAGE;
+      static const std::string SINGLE_SHOT_ON_MESSAGE;
+      static const std::string SINGLE_SHOT_OFF_MESSAGE;
 
       /*!
        * @brief Enable or disable continuous measurement mode
@@ -118,9 +120,21 @@ namespace trilux
       {
          return enable ? "Si sh on" : "Si sh of";
       }
+
+      /*!
+       * @brief Get the next measurement
+       * @return The command string to send to the TriLux
+       * @note Only works when single shot mode is enabled
+       */
+      inline std::string getMeasurement()
+      {
+         return "get";
+      }
    };
 
    const std::string TriLuxProtocol::STOPPED_MESSAGE = "MiniTracka Stopped.";
+   const std::string TriLuxProtocol::SINGLE_SHOT_ON_MESSAGE = "TSingle Shot mode is ON";
+   const std::string TriLuxProtocol::SINGLE_SHOT_OFF_MESSAGE = "TSingle Shot mode is OFF";
 }
 
 #endif // TRILUX_PROTOCOL_H

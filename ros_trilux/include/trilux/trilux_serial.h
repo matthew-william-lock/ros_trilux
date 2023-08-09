@@ -69,7 +69,9 @@ namespace trilux
     {
         MEASUREMENT,
         STOPPED,
-        RUNNING
+        RUNNING,
+        SINGLE_SHOT_ON,
+        SINGLE_SHOT_OFF
     };
 
     class TriLuxSerial : public virtual TriLuxProtocol
@@ -124,9 +126,37 @@ namespace trilux
          * @brief Start receiving data from the serial port
          */
         void startReceive()
-        {
+        {   
+            std::cout << "[TRILUX SERIAL] Start receiving data\n";
             boost::asio::async_read_until(this->port, this->buffer, "\n\r", boost::bind(&TriLuxSerial::onData, this, _1, _2));
         };
+
+        /*!
+         * @brief Determine the type of message received
+         * @param data Data received from the serial port
+         */
+        SerialMessageType getSerialMessageType(std::string data)
+        {
+
+            if (data.find(this->STOPPED_MESSAGE) != std::string::npos)
+            {
+                std::cout<< "[TRILUX SERIAL] STOPPED MESSAGE RECEIVED\n";
+                return SerialMessageType::STOPPED;
+            }
+            else if (data.find(this->SINGLE_SHOT_ON_MESSAGE) != std::string::npos)
+            {
+                std::cout<< "[TRILUX SERIAL] SINGLE SHOT ON MESSAGE RECEIVED\n";
+                return SerialMessageType::SINGLE_SHOT_ON;
+            }
+            else if (data.find(this->SINGLE_SHOT_OFF_MESSAGE) != std::string::npos)
+            {
+                std::cout<< "[TRILUX SERIAL] SINGLE SHOT OFF MESSAGE RECEIVED\n";
+                return SerialMessageType::SINGLE_SHOT_OFF;
+            }
+
+            std::cout << "[TRILUX SERIAL] MEASUREMENT MESSAGE RECEIVED\n";
+            return SerialMessageType::MEASUREMENT;
+        }
 
         /*!
          * @brief Callback for when data is received from the serial port.
@@ -138,6 +168,8 @@ namespace trilux
          */
         void onData(const boost::system::error_code &e, std::size_t size)
         {
+
+            std::cout << "[TRILUX SERIAL] ON DATA\n";
 
             // Check for error
             if (e)
@@ -151,18 +183,27 @@ namespace trilux
             std::string line;
             std::getline(is, line);
 
-            SerialMessageType type;
-            if (line.find(this->STOPPED_MESSAGE) != std::string::npos)
-            {
-                type = SerialMessageType::STOPPED;
-                serial_write_mutex.unlock();
-            }
+            std::cout << "Received: " << line << std::endl;
 
-            auto measurement = this->decodeData(line);
-            if (measurement.first)
+            SerialMessageType type = this->getSerialMessageType(line);
+
+            if (type == SerialMessageType::STOPPED ||
+                type == SerialMessageType::SINGLE_SHOT_ON ||
+                type == SerialMessageType::SINGLE_SHOT_OFF)
             {
-                std::cout << measurement.second.toString() << std::endl;
-                callback_(measurement.second);
+                // this->serial_write_mutex.unlock();
+            }
+            else if (type == SerialMessageType::MEASUREMENT)
+            {
+                // Decode measurement data
+                auto measurement = this->decodeData(line);
+                if (measurement.first)
+                {
+                    std::cout << measurement.second.toString() << std::endl;
+                    callback_(measurement.second);
+                }
+
+                // this->serial_write_mutex.
             }
 
             // Start receiving again

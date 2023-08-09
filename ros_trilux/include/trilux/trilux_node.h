@@ -71,7 +71,7 @@ namespace trilux
                                                       this->onDataCallback(measurement);
                                                    })
       {
-         ROS_INFO("TriLux node started");
+         ROS_INFO("[TRIlUX_NODE] TriLux node started");
          init();
       };
 
@@ -129,8 +129,10 @@ namespace trilux
       {
 
          this->trilux_serial.send(this->trilux_serial.enableSingleShotMsg(req.enable));
-
-         ROS_INFO("enableSingleShot");
+         if (req.enable)
+            ROS_INFO("[TRILUX_NODE] Enabling single shot measurement mode");
+         else
+            ROS_INFO("[TRILUX_NODE] Disabling single shot measurement mode");
          return true;
       }
 
@@ -139,7 +141,7 @@ namespace trilux
        */
       bool triggerMeasurement(ros_trilux_msgs::GetMeasurement::Request &req, ros_trilux_msgs::GetMeasurement::Response &res)
       {
-         // TODO : Finish function
+         this->trilux_serial.send(this->trilux_serial.getMeasurement());
          ROS_INFO("triggerMeasurement");
          return true;
       }
