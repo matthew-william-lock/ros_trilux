@@ -72,7 +72,7 @@ namespace trilux
                                                    })
       {
          ROS_INFO("[TRIlUX_NODE] TriLux node started");
-         init();
+         init(port,baud);
       };
 
       ~TriLuxNode(){};
@@ -94,8 +94,18 @@ namespace trilux
       /*!
        * @brief Initialise the node
        */
-      void init()
+      void init(std::string port, int baud)
       {
+
+         // Connect to serial
+         bool successfull_connection = this->trilux_serial.connect(port,baud);
+         while (!successfull_connection){
+            ROS_ERROR("[ROS_TRILUX] Could not open serial port, trying again soon...");
+            sleep(2);
+            successfull_connection = this->trilux_serial.connect(port,baud);
+         }
+         ROS_INFO("[TRILUX_NODE] Successfully opened serial port");
+
          // Initialise the node
          ros::NodeHandle nh, ph("~");
 

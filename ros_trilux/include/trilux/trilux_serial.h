@@ -81,9 +81,7 @@ namespace trilux
                                                                                                                                timer(io),
                                                                                                                                port(io),
                                                                                                                                callback_(onDatacallback)
-        {
-            this->connect(port_name, baud);
-        };
+        {};
 
         ~TriLuxSerial(){};
 
