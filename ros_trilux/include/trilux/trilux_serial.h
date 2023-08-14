@@ -112,10 +112,10 @@ namespace trilux
             this->port.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
 
             // Start the receive thread
+            this->startReceive();
             this->runner = boost::thread(boost::bind(&boost::asio::io_service::run, &this->io));
 
             // Start receiving data
-            this->startReceive();
 
             return true;
         }
