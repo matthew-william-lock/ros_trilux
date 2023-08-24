@@ -125,7 +125,7 @@ namespace trilux
          */
         void startReceive()
         {   
-            std::cout << "[TRILUX SERIAL] Start receiving data\n";
+            // std::cout << "[TRILUX SERIAL] Start receiving data\n";
             boost::asio::async_read_until(this->port, this->buffer, "\n\r", boost::bind(&TriLuxSerial::onData, this, _1, _2));
         };
 
@@ -205,7 +205,7 @@ namespace trilux
             }
 
             // Start receiving again
-            std::cout << "Waiting for data..." << std::endl;
+            // std::cout << "Waiting for data..." << std::endl;
             this->startReceive();
         }
 
@@ -222,6 +222,7 @@ namespace trilux
                 // Add CR to end of string
                 data += "\r";
                 boost::asio::write(this->port, boost::asio::buffer(data, data.size()));
+                serial_write_mutex.unlock();
                 return true;
             }
             catch (boost::system::system_error &e)

@@ -169,7 +169,7 @@ namespace trilux
 
       const void onDataCallback(const trilux::TriLuxMeasurement &measurement)
       {
-         ROS_INFO("onDataCallback");
+         // ROS_INFO("onDataCallback");
 
          // Create ros_trilux_msgs/Measurement
          ros_trilux_msgs::Measurement msg;

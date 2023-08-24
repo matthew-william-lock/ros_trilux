@@ -14,14 +14,21 @@ find_package(catkin REQUIRED COMPONENTS
 
 # Generate messages in the 'msg' folder
 add_message_files(
-  DIRECTORY
-  "${CMAKE_CURRENT_SOURCE_DIR}/msg"
+    FILES 
+    Measurement.msg
 )
 
 ## Generate services in the 'srv' folder
 add_service_files(
-    DIRECTORY
-    "${CMAKE_CURRENT_SOURCE_DIR}/srv"
+  FILES
+  EnableAnalog.srv
+  EnableReporting.srv
+  EnableSingleShot.srv
+  GetMeasurement.srv
+  Reboot.srv
+  SaveSetup.srv
+  SetRate.srv
+  StopStartMeasurements.srv
 )
 
 # Generate added messages and services with any dependencies listed here
